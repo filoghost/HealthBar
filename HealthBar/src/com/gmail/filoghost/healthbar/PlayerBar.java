@@ -102,7 +102,7 @@ public class PlayerBar {
 			Team team = sb.getTeam("hbr" + intHealth + "-" + intMax);
 			if (team == null) {
 				team = sb.registerNewTeam("hbr" + intHealth + "-" + intMax);
-				team.setSuffix(" - " + color + intHealth + "Â§7/Â§a" + intMax);
+				team.setSuffix(" - " + color + intHealth + "§7/§a" + intMax);
 				team.setCanSeeFriendlyInvisibles(false);
 			}
 			team.addPlayer(op);	
@@ -112,9 +112,9 @@ public class PlayerBar {
 
 	public static String getColor (double health, double max) {
 		double ratio = health/max;
-		if (ratio > 0.5) 	return "Â§a"; //more than half health -> green
-		if (ratio > 0.25) 	return "Â§e"; //more than quarter health -> yellow
-		return "Â§c"; //critical health -> red
+		if (ratio > 0.5) 	return "§a"; //more than half health -> green
+		if (ratio > 0.25) 	return "§e"; //more than quarter health -> yellow
+		return "§c"; //critical health -> red
 	}
 
 	private static int roundToNearest(double d) {

@@ -1,0 +1,11 @@
+name: HealthBar
+author: filoghost
+main: com.gmail.filoghost.healthbar.Main
+version: 1.7.2
+softdepend: [EpicBoss Gold Edition]
+
+commands:
+   healthbar:
+      description: Main command for HealthBar, use /hbr help for commands.
+      usage: /<command>
+      aliases: [hbr,hbar]

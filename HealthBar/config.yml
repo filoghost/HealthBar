@@ -1,0 +1,45 @@
+#           ---- + HealthBar by filoghost + ----
+#           
+#         Please read the instructions before editing:
+# dev.bukkit.org/bukkit-plugins/health-bar/pages/configuration
+#              
+#           ---- + ---------------------- + ----
+#                                                     .
+player-bars:
+  enable: true
+  after-name:
+    enable: true
+    display-style: 1
+    always-shown: false
+    text-mode: false
+    hide-delay-seconds: 5
+    use-custom-file: false
+  below-name:
+    enable: true
+    text: '&cHealth'
+    use-proportion: true
+    proportional-to: 10
+  world-disabling: false
+  disabled-worlds: world_nether,world_the_end
+mob-bars:
+  enable: true
+  show-on-named-mobs: true
+  display-style: 1
+  always-shown: false
+  text-mode: false
+  custom-text-enable: false
+  custom-text: '{name} - &a{health}/{max}'
+  hide-delay-seconds: 5
+  show-only-if-looking: false
+  use-custom-file: false
+  world-disabling: false
+  disabled-worlds: world_nether,world_the_end
+  type-disabling: false
+  disabled-types: creeper,zombie,skeleton,iron_golem
+hooks:
+  epicboss: false
+fix-tab-names: true
+fix-death-messages: true
+update-notification: true
+use-player-bar-permissions: false
+override-other-scoreboard: false

@@ -1,0 +1,40 @@
+# Do not use tabs, change only the part in quotes.
+# You can use these placeholders, but the could change in
+# future, so check this page when you update:
+# 
+#  dev.bukkit.org/server-mods/health-bar/pages/customization
+#
+# Placeholders:
+# <3          heart symbol
+# [x]         block symbol
+# [/]         half block symbol
+# [*]         star symbol
+# [p]         big point symbol
+# [+]         small diamond symbol
+# [++]        big diamond symbol
+# 
+# You can use formatting codes (&4, &n, &k...)
+#         
+# Symbols cannot be saved in .yml files, you can look
+# at the customization page to see them.
+
+5-percent-bar: '&c5% HP'
+10-percent-bar: '&c10% HP'
+15-percent-bar: '&c15% HP'
+20-percent-bar: '&c20% HP'
+25-percent-bar: '&e25% HP'
+30-percent-bar: '&e30% HP'
+35-percent-bar: '&e35% HP'
+40-percent-bar: '&e40% HP'
+45-percent-bar: '&e45% HP'
+50-percent-bar: '&e50% HP'
+55-percent-bar: '&a55% HP'
+60-percent-bar: '&a60% HP'
+65-percent-bar: '&a65% HP'
+70-percent-bar: '&a70% HP'
+75-percent-bar: '&a75% HP'
+80-percent-bar: '&a80% HP'
+85-percent-bar: '&a85% HP'
+90-percent-bar: '&a90% HP'
+95-percent-bar: '&a95% HP'
+100-percent-bar: '&a100% HP'

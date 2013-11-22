@@ -7,7 +7,7 @@ import org.bukkit.command.CommandSender;
 public class Commands implements CommandExecutor {
 	public Main instance;
 	
-	private static final String PREFIX = "Â§2[Â§aHealthBarÂ§2] ";
+	private static final String PREFIX = "§2[§aHealthBar§2] ";
 		
 	public Commands(Main main) {
 		instance = main;
@@ -45,7 +45,7 @@ public class Commands implements CommandExecutor {
 				return true;
 			}
 			
-	    	sender.sendMessage(PREFIX + "Â§eUnknown command. Type Â§a" + label + " Â§efor help.");
+	    	sender.sendMessage(PREFIX + "§eUnknown command. Type §a" + label + " §efor help.");
 	    	return true;
 	}
 
@@ -57,20 +57,20 @@ public class Commands implements CommandExecutor {
 		}
 		try {
 			instance.reloadConfigFromDisk();
-			sender.sendMessage("Â§e>>Â§6 HealthBar reloaded");
+			sender.sendMessage("§e>>§6 HealthBar reloaded");
 		}
 		catch (Exception e) {
 			e.printStackTrace();
-			sender.sendMessage("Â§cFailed to reload configs, take a look at the console!");
+			sender.sendMessage("§cFailed to reload configs, take a look at the console!");
 		}
 		
 	}
 
 	private void sendInfo(CommandSender sender) {
 		sender.sendMessage(PREFIX);
-		sender.sendMessage("Â§aVersion: Â§7" + instance.getDescription().getVersion());
-		sender.sendMessage("Â§aDeveloper: Â§7filoghost");
-		sender.sendMessage("Â§aCommands: Â§7/hbr help");
+		sender.sendMessage("§aVersion: §7" + instance.getDescription().getVersion());
+		sender.sendMessage("§aDeveloper: §7filoghost");
+		sender.sendMessage("§aCommands: §7/hbr help");
 	}
 	
 	private void sendCommandList(CommandSender sender) {
@@ -78,13 +78,13 @@ public class Commands implements CommandExecutor {
 			noPermissionMessage(sender);
 			return;
 		}
-		sender.sendMessage("Â§e>>Â§6 HealthBar commands: ");
-		sender.sendMessage("Â§2/hbr Â§7- Â§aDisplays general plugin info");
-		sender.sendMessage("Â§2/hbr reload Â§7- Â§aReloads the configs");
-		sender.sendMessage("Â§2/hbr update Â§7- Â§aChecks for updates");
+		sender.sendMessage("§e>>§6 HealthBar commands: ");
+		sender.sendMessage("§2/hbr §7- §aDisplays general plugin info");
+		sender.sendMessage("§2/hbr reload §7- §aReloads the configs");
+		sender.sendMessage("§2/hbr update §7- §aChecks for updates");
 	}
 
 	private void noPermissionMessage(CommandSender sender) {
-		sender.sendMessage("Â§cYou don't have permission.");
+		sender.sendMessage("§cYou don't have permission.");
 	}
 }

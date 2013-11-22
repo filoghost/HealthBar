@@ -202,7 +202,7 @@ public class DamageListener extends JavaPlugin implements Listener {
 		 */
 		String customName = mob.getCustomName();
 		if (customName != null) {
-			if (!customName.startsWith("Â§r")) {
+			if (!customName.startsWith("§r")) {
 				if (showOnCustomNames) {
 					namesTable.put(mob.getEntityId(), new StringBoolean(customName, mob.isCustomNameVisible()));
 				} else return;
@@ -261,7 +261,7 @@ public class DamageListener extends JavaPlugin implements Listener {
 	    		  //what type of health should be displayed?
 			      if (barStyle == BarType.BAR)
 			      {
-			    	  mob.setCustomName("Â§r" + barArray[round0To20((health/max) * 20.0)]);
+			    	  mob.setCustomName("§r" + barArray[round0To20((health/max) * 20.0)]);
 			    	  
 			      }
 			      else if (barStyle == BarType.CUSTOM_TEXT)
@@ -273,12 +273,12 @@ public class DamageListener extends JavaPlugin implements Listener {
 						if (customTextContains_Name) 
 							displayString = displayString.replace("{n}", getName(mob, mob.getType().toString()));
 							
-						mob.setCustomName("Â§r" + displayString);
+						mob.setCustomName("§r" + displayString);
 							
 			      }
 			      else if (barStyle == BarType.DEFAULT_TEXT)
 			      {
-			    	  StringBuilder sb = new StringBuilder("Â§rHealth: ");
+			    	  StringBuilder sb = new StringBuilder("§rHealth: ");
 			    	  sb.append(roundUp(health));
 			    	  sb.append("/");
 			    	  sb.append(roundUp(max));
@@ -315,7 +315,7 @@ public class DamageListener extends JavaPlugin implements Listener {
 	public static void hideBar(LivingEntity mob) {
 		
 		String cname = mob.getCustomName();
-		if (cname != null && !cname.startsWith("Â§r")) {
+		if (cname != null && !cname.startsWith("§r")) {
 			//it's a real name! Don't touch it!
 			return;
 		}
@@ -348,7 +348,7 @@ public class DamageListener extends JavaPlugin implements Listener {
 		if (cname == null) return null;
 		if (cname == "") return "";
 		
-		if (cname.startsWith("Â§r")) {
+		if (cname.startsWith("§r")) {
 			if (showOnCustomNames) {
 				int id = mob.getEntityId();
 				StringBoolean sb = namesTable.get(id);
@@ -476,7 +476,7 @@ public class DamageListener extends JavaPlugin implements Listener {
 			if (!Bukkit.getPluginManager().isPluginEnabled("EpicBoss Gold Edition")) {
 				//if epicboss is not loaded, disable hook
 				hookEpicboss = false;
-				Bukkit.getConsoleSender().sendMessage("Â§a[HealthBar] Â§fCould not find plugin EpicBoss Gold Edition, " +
+				Bukkit.getConsoleSender().sendMessage("§a[HealthBar] §fCould not find plugin EpicBoss Gold Edition, " +
 						"check that you have installed it and it's correctly loaded. If not, set 'hooks, epicboss: false' in the configs. " +
 						"If you think that is an error, contact the developer.");
 			} else {
