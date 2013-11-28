@@ -2,6 +2,7 @@ package com.gmail.filoghost.healthbar;
 
 import org.apache.commons.lang.WordUtils;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
@@ -13,11 +14,13 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import com.gmail.filoghost.healthbar.api.HealthBarAPI;
+
 public class DeathListener extends JavaPlugin implements Listener {
 
 	private static boolean wantDeathListener;
 	
-	@EventHandler (priority = EventPriority.LOWEST)
+	@EventHandler (priority = EventPriority.LOW)
 	public void onPlayerDeathEvent(PlayerDeathEvent event) {
 		if (!wantDeathListener) return;
 		try {
@@ -26,6 +29,7 @@ public class DeathListener extends JavaPlugin implements Listener {
 		EntityDamageEvent damageEvent = event.getEntity().getLastDamageCause();
 		if(damageEvent instanceof EntityDamageByEntityEvent) {
 			Entity damager = ((EntityDamageByEntityEvent)damageEvent).getDamager();
+			
 			//----------------------NORMAL KILL-------------------------
 			if (deathMessage.contains("killed") || deathMessage.contains("slain") || deathMessage.contains("got finished")) {
 				if (damager instanceof Player) {
@@ -40,7 +44,7 @@ public class DeathListener extends JavaPlugin implements Listener {
 					
 					}
 				if (damager instanceof LivingEntity) {
-					event.setDeathMessage(victim + " was slain by " + parseName(damager.getType().toString()));
+					event.setDeathMessage(victim + " was slain by " + getName((LivingEntity) damager));
 					return;
 					}
 				}
@@ -51,7 +55,7 @@ public class DeathListener extends JavaPlugin implements Listener {
 					return;
 					}
 				if (damager instanceof LivingEntity) {
-					event.setDeathMessage(victim + " was blown up by " + parseName(damager.getType().toString()));
+					event.setDeathMessage(victim + " was blown up by " + getName((LivingEntity) damager));
 					return;
 					}
 				}
@@ -70,7 +74,7 @@ public class DeathListener extends JavaPlugin implements Listener {
 						}
 					}
 					if (shooter instanceof LivingEntity) {
-						event.setDeathMessage(victim + " was shot by " + parseName(shooter.getType().toString()));
+						event.setDeathMessage(victim + " was shot by " + getName(shooter));
 						return;
 					}
 				}
@@ -84,14 +88,13 @@ public class DeathListener extends JavaPlugin implements Listener {
 						return;
 						}
 					if (shooter instanceof LivingEntity) {
-						event.setDeathMessage(victim + "was fireballed by " + parseName(shooter.getType().toString()));
+						event.setDeathMessage(victim + "was fireballed by " + getName(shooter));
 						return;
 					}
 				}
 			}
-			//-----------------------MAGIC---------------------------
-			//TODO
 		}
+		
 		if (deathMessage.contains("high place") || deathMessage.contains("doomed to fall") || deathMessage.contains("fell off") || deathMessage.contains("fell out of the water")) {
 			event.setDeathMessage(victim + " fell from a high place");
 			return; }
@@ -142,14 +145,13 @@ public class DeathListener extends JavaPlugin implements Listener {
 		}
 	}
 
-	private String parseName(String oldname) {
-		if (oldname == "PIG_ZOMBIE") 	return "Zombie Pigman";
-		if (oldname == "CAVE_SPIDER") 	return "Cave Spider";
-		if (oldname == "MAGMA_CUBE") 	return "Magma Cube";
-		if (oldname == "MUSHROOM_COW") 	return "Mooshroom";
-		if (oldname == "IRON_GOLEM") 	return "Iron Golem";
-		if (oldname == "ENDER_DRAGON") 	return "Ender Dragon";
-		return WordUtils.capitalizeFully(oldname.replace("_", " "));
+	private String getName(LivingEntity mob) {
+		String customName = HealthBarAPI.getMobName(mob);
+		if (customName != null) return customName;
+
+		if (mob.getType() == EntityType.PIG_ZOMBIE) 	return "Zombie Pigman";
+		if (mob.getType() == EntityType.MUSHROOM_COW) 	return "Mooshroom";
+		return WordUtils.capitalizeFully(mob.getType().toString().replace("_", " "));
 	}
 	
 	public static void loadConfiguration() {

@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import me.ThaH3lper.com.EpicBoss;
 import me.ThaH3lper.com.API.EpicBossAPI;
 
 import org.bukkit.Bukkit;
@@ -346,7 +345,6 @@ public class DamageListener extends JavaPlugin implements Listener {
 		
 		String cname = mob.getCustomName();
 		if (cname == null) return null;
-		if (cname == "") return "";
 		
 		if (cname.startsWith("§r")) {
 			if (showOnCustomNames) {
