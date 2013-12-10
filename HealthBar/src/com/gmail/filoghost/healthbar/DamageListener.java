@@ -36,7 +36,7 @@ public class DamageListener extends JavaPlugin implements Listener {
 	private static			BukkitScheduler scheduler = Bukkit.getScheduler();
 	
 	//mob vars
-	private static 		boolean mobEnabled;
+	public static 		boolean mobEnabled;
 	private static		String[] barArray;
 	private static		boolean mobUseText;
 	private static		boolean mobUseCustomText;
@@ -113,7 +113,7 @@ public class DamageListener extends JavaPlugin implements Listener {
 	
 	@EventHandler (ignoreCancelled = true, priority = EventPriority.HIGHEST)
 	public void onEntitySpawn(CreatureSpawnEvent event) {
-		if (mobHideDelay == 0L) {
+		if (mobHideDelay == 0L && mobEnabled) {
 			//show the bar on all the mobs
 			final LivingEntity mob = event.getEntity();
 			scheduler.scheduleSyncDelayedTask(plugin, new Runnable() { public void run() {
@@ -260,13 +260,13 @@ public class DamageListener extends JavaPlugin implements Listener {
 	    		  //what type of health should be displayed?
 			      if (barStyle == BarType.BAR)
 			      {
-			    	  mob.setCustomName("§r" + barArray[round0To20((health/max) * 20.0)]);
+			    	  mob.setCustomName("§r" + barArray[Utils.roundUpPositiveWithMax(((health/max) * 20.0), 20)]);
 			    	  
 			      }
 			      else if (barStyle == BarType.CUSTOM_TEXT)
 			      {
-						String displayString = mobCustomText.replace("{h}", String.valueOf(roundUp(health)));
-						displayString = displayString.replace("{m}", String.valueOf(roundUp(max)));
+						String displayString = mobCustomText.replace("{h}", String.valueOf(Utils.roundUpPositive(health)));
+						displayString = displayString.replace("{m}", String.valueOf(Utils.roundUpPositive(max)));
 							
 						//optimization, you don't need to check always if a string contains {n}
 						if (customTextContains_Name) 
@@ -278,9 +278,9 @@ public class DamageListener extends JavaPlugin implements Listener {
 			      else if (barStyle == BarType.DEFAULT_TEXT)
 			      {
 			    	  StringBuilder sb = new StringBuilder("§rHealth: ");
-			    	  sb.append(roundUp(health));
+			    	  sb.append(Utils.roundUpPositive(health));
 			    	  sb.append("/");
-			    	  sb.append(roundUp(max));
+			    	  sb.append(Utils.roundUpPositive(max));
 			    	  mob.setCustomName(sb.toString());
 			      }
 			      
@@ -429,26 +429,24 @@ public class DamageListener extends JavaPlugin implements Listener {
         FileConfiguration config = plugin.getConfig();
         
 		//setup mobs
-		mobEnabled = 			config.getBoolean("mob-bars.enable");
-		mobUseText = 			config.getBoolean("mob-bars.text-mode");
-		mobUseCustomText = 		config.getBoolean("mob-bars.custom-text-enable");
-		mobCustomText = 		Utils.replaceSymbols(config.getString("mob-bars.custom-text"));
-		mobSemiHidden = 		config.getBoolean("mob-bars.show-only-if-looking");
+		mobEnabled = 			config.getBoolean(Configuration.Nodes.MOB_ENABLE.getNode());
+		mobUseText = 			config.getBoolean(Configuration.Nodes.MOB_TEXT_MODE.getNode());
+		mobUseCustomText = 		config.getBoolean(Configuration.Nodes.MOB_CUSTOM_TEXT_ENABLE.getNode());
+		mobCustomText = 		Utils.replaceSymbols(config.getString(Configuration.Nodes.MOB_CUSTOM_TEXT.getNode()));
+		mobSemiHidden = 		config.getBoolean(Configuration.Nodes.MOB_SHOW_IF_LOOKING.getNode());
 		
-		mobHideDelay = (long) 	config.getInt("mob-bars.hide-delay-seconds")*20;
+		mobHideDelay = (long) 	config.getInt(Configuration.Nodes.MOB_DELAY.getNode())*20;
 		if (config.getBoolean(Configuration.Nodes.MOB_ALWAYS_SHOWN.getNode(), false)) {
 			mobHideDelay = 0L;
 		}
 		
-		
-		mobUseCustomBar = 		config.getBoolean("mob-bars.use-custom-file");
-		showOnCustomNames = 	config.getBoolean("mob-bars.show-on-named-mobs");
-		
-		mobUseDisabledWorlds = config.getBoolean("mob-bars.world-disabling");
-		//if (mobDisabledWorlds != null) mobDisabledWorlds.clear();
+		mobUseCustomBar = 		config.getBoolean(Configuration.Nodes.MOB_USE_CUSTOM.getNode());
+		showOnCustomNames = 	config.getBoolean(Configuration.Nodes.MOB_SHOW_ON_NAMED.getNode());
+		mobUseDisabledWorlds = config.getBoolean(Configuration.Nodes.MOB_WORLD_DISABLING.getNode());
+
 		if (mobUseDisabledWorlds) {
 			mobDisabledWorlds = Arrays.asList(plugin.getConfig()
-												.getString("mob-bars.disabled-worlds")
+												.getString(Configuration.Nodes.MOB_DISABLED_WORLDS.getNode())
 												.toLowerCase()
 												.replace(" ", "")
 												.split(","));
@@ -456,8 +454,10 @@ public class DamageListener extends JavaPlugin implements Listener {
 		
 		mobTypeDisabling =		config.getBoolean(Configuration.Nodes.MOB_TYPE_DISABLING.getNode());
 		
+		
+		
 		//setup players
-		playerEnabled = config.getBoolean("player-bars.enable");
+		playerEnabled = config.getBoolean(Configuration.Nodes.PLAYERS_ENABLE.getNode());
 		
 		playerHideDelay = (long) config.getInt("player-bars.after-name.hide-delay-seconds")*20;
 		if (config.getBoolean(Configuration.Nodes.PLAYERS_AFTER_ALWAYS_SHOWN.getNode(), false)) {
@@ -465,10 +465,10 @@ public class DamageListener extends JavaPlugin implements Listener {
 		}
 		
 		
-		playerUseAfter = config.getBoolean("player-bars.after-name.enable");
+		playerUseAfter = config.getBoolean(Configuration.Nodes.PLAYERS_AFTER_ENABLE.getNode());
 		
 		//setup for epicboss
-		hookEpicboss = config.getBoolean("hooks.epicboss");
+		hookEpicboss = config.getBoolean(Configuration.Nodes.HOOKS_EPIBOSS.getNode());
 		
 		if (hookEpicboss) {
 			if (!Bukkit.getPluginManager().isPluginEnabled("EpicBoss Gold Edition")) {
@@ -538,22 +538,5 @@ public class DamageListener extends JavaPlugin implements Listener {
 		}
 	}
 
-	public static int round0To20(double d) {
-	    int i = (int) d;
-	    if ((d - (double) i)> 0.00001) i++;
-	    if (i < 1) return 1;
-	    if (i > 20) return 20;
-	    return i;
-	}
-	
-	private static int roundUp(double d) {
-	    int i = (int) d;
-	    if ((d - (double) i)>0.00001) {
-	    	i++;
-	    }
-	    if (i < 0) return 0;
-	    
-	    return i;  
-	}
 	//end of the class
 }

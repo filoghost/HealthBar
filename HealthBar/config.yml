@@ -16,9 +16,9 @@ player-bars:
     use-custom-file: false
   below-name:
     enable: true
-    text: '&cHealth'
+    text: '% &cHealth'
     use-proportion: true
-    proportional-to: 10
+    proportional-to: 100
   world-disabling: false
   disabled-worlds: world_nether,world_the_end
 mob-bars:

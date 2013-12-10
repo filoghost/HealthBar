@@ -70,7 +70,7 @@ public class Main extends JavaPlugin {
 		
 		
 		//try to check updates
-		Updater.UpdaterHandler.setup(this, 54447, "Â§2[Â§aHealthBarÂ§2] ", super.getFile(), ChatColor.GREEN, "/hbr update", "health-bar");
+		Updater.UpdaterHandler.setup(this, 54447, "§2[§aHealthBar§2] ", super.getFile(), ChatColor.GREEN, "/hbr update", "health-bar");
 		
 		if (config.getBoolean("update-notification")) {
 			Thread updaterThread = new Thread(new Runnable() { public void run() {

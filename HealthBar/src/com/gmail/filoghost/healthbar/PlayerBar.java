@@ -22,6 +22,7 @@ public class PlayerBar {
 	private static boolean useBelow;
 	private static boolean belowUseProportion;
 	private static int belowNameProportion;
+	private static boolean belowUseRawAmountOfHearts;
 	private static Objective belowObj;
 	
 	private static boolean useCustomBar;
@@ -37,7 +38,7 @@ public class PlayerBar {
 		if (playerEnabled && useBelow) {
 			//create the objective
 			belowObj = sb.registerNewObjective("healthbarbelow", "dummy");
-			belowObj.setDisplayName(Utils.replaceSymbols(instance.getConfig().getString("player-bars.below-name.text")));
+			belowObj.setDisplayName(Utils.replaceSymbols(instance.getConfig().getString(Configuration.Nodes.PLAYERS_BELOW_TEXT.getNode())));
 			belowObj.setDisplaySlot(DisplaySlot.BELOW_NAME);
 		}
 		
@@ -76,10 +77,14 @@ public class PlayerBar {
 		if (useBelow && playerEnabled) {
 			int score = 0;
 			
-			if (belowUseProportion)
-				score = roundUp((player.getHealth()) * ((double) belowNameProportion) / (player.getMaxHealth()));
-			else
-				score = roundUp(player.getHealth());
+			//higher priority
+			if (belowUseRawAmountOfHearts) {
+				score = getRawAmountOfHearts(player);
+			} else if (belowUseProportion) {
+				score = Utils.roundUpPositive((player.getHealth()) * ((double) belowNameProportion) / (player.getMaxHealth()));
+			} else {
+				score = Utils.roundUpPositive(player.getHealth());
+			}
 					
 			belowObj.getScore(player).setScore(score);
 		}
@@ -90,13 +95,13 @@ public class PlayerBar {
 		OfflinePlayer op = (OfflinePlayer) player;
 		
 		if (useCustomBar || (!textMode)) {
-			int healthOn10 = roundToNearest((health * 10.0)/max);
+			int healthOn10 = Utils.roundUpPositiveWithMax(((health * 10.0)/max), 10);
 			sb.getTeam("hbr" + Integer.toString(healthOn10)).addPlayer((op));
 			return;
 		} else {
 			
-			int intHealth = roundUp(health);
-			int intMax = roundUp(max);
+			int intHealth = Utils.roundUpPositive(health);
+			int intMax = Utils.roundUpPositive(max);
 			
 			String color = getColor(health, max);
 			Team team = sb.getTeam("hbr" + intHealth + "-" + intMax);
@@ -116,26 +121,6 @@ public class PlayerBar {
 		if (ratio > 0.25) 	return "§e"; //more than quarter health -> yellow
 		return "§c"; //critical health -> red
 	}
-
-	private static int roundToNearest(double d) {
-	    int i = (int) d;
-	    if ((d - (double)i)>0.00001) {
-	    	i++;
-	    }
-	    if (i<1) { 	return 1; }
-	    if (i>10) {	return 10; }
-	    return i;
-	}
-	
-	private static int roundUp(double d) {
-	    int i = (int) d;
-	    if ((d - (double)i)>0.00001) {
-	    	i++;
-	    }
-	    if (i<0) return 0;
-	    
-	    return i;  
-	}
 	
 	public static void loadConfiguration() {
 		        
@@ -145,22 +130,31 @@ public class PlayerBar {
 		
 		FileConfiguration config = instance.getConfig();
 
-		playerEnabled = 		config.getBoolean("player-bars.enable");
-		textMode = 				config.getBoolean("player-bars.after-name.text-mode");
-		useCustomBar = 			config.getBoolean("player-bars.after-name.use-custom-file");
-		useBelow = 				config.getBoolean("player-bars.below-name.enable");
-		belowUseProportion = 	config.getBoolean("player-bars.below-name.use-proportion");
-		belowNameProportion = 	config.getInt("player-bars.below-name.proportional-to");
+		playerEnabled = 		config.getBoolean(Configuration.Nodes.PLAYERS_ENABLE.getNode());
+		textMode = 				config.getBoolean(Configuration.Nodes.PLAYERS_AFTER_TEXT_MODE.getNode());
+		useCustomBar = 			config.getBoolean(Configuration.Nodes.PLAYERS_AFTER_USE_CUSTOM.getNode());
+		useBelow = 				config.getBoolean(Configuration.Nodes.PLAYERS_BELOW_ENABLE.getNode());
+		belowUseProportion = 	config.getBoolean(Configuration.Nodes.PLAYERS_BELOW_USE_PROPORTION.getNode());
+		belowNameProportion = 	config.getInt(Configuration.Nodes.PLAYERS_BELOW_PROPORTIONAL_TO.getNode());
+		belowUseRawAmountOfHearts = 	config.getBoolean(Configuration.Nodes.PLAYERS_BELOW_DISPLAY_RAW_HEARTS.getNode());
 		
 		setupBelow();
 		
 		if (useCustomBar) {
 			PlayerBarUtils.create10CustomTeams(sb, Utils.loadFile("custom-player-bar.yml", instance));
 		} else if (!textMode) {
-			PlayerBarUtils.create10DefaultTeams(sb, config.getInt("player-bars.after-name.display-style"));
+			PlayerBarUtils.create10DefaultTeams(sb, config.getInt(Configuration.Nodes.PLAYERS_AFTER_STYLE.getNode()));
 		}
 		//else creates the teams at the moment
 		
 		PlayerBarUtils.setAllTeamsInvisibility(sb);
+	}
+	
+	public static int getRawAmountOfHearts(Player player) {
+		if (player.isHealthScaled()) {
+			return Utils.round(player.getHealth() * 10.0 / player.getMaxHealth());
+		} else {
+			return Utils.round(player.getHealth() / 2);
+		}
 	}
 }

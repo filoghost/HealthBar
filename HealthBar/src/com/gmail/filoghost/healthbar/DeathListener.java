@@ -155,7 +155,7 @@ public class DeathListener extends JavaPlugin implements Listener {
 	}
 	
 	public static void loadConfiguration() {
-		wantDeathListener = Main.plugin.getConfig().getBoolean("fix-death-messages");
+		wantDeathListener = Main.plugin.getConfig().getBoolean(Configuration.Nodes.FIX_DEATH_MESSAGES.getNode());
 	}
 	
 //end of the class

@@ -39,13 +39,13 @@ public class Utils {
 		
 		//replaces colors and symbols
 		return ChatColor.translateAlternateColorCodes('&', input)
-					.replace("<3", "❤")
-					.replace("[x]", "█")
-					.replace("[/]", "▌")
-					.replace("[*]", "★")
-					.replace("[p]", "●")		
-					.replace("[+]", "♦")
-					.replace("[++]", "✦");
+					.replace("<3", "\u2764")
+					.replace("[x]", "\u2588")
+					.replace("[/]", "\u2588")
+					.replace("[*]", "\u2605")
+					.replace("[p]", "\u25CF")		
+					.replace("[+]", "\u25C6")
+					.replace("[++]", "\u2726");
 
 	}
 	
@@ -126,6 +126,32 @@ public class Utils {
 		}
 		
 		return list;
+	}
+	
+	//remainder: from 0.0 to 0.5 (included) it's rounded down, from 0.5 (excluded) to 0.999 it's rounded up.
+	public static int round(double d) {
+		double remainder = d - (int) d;
+		if (remainder <= 0.5) {
+			return (int) d;
+		} else {
+			return ((int) d) + 1;
+		}
+	}
+	
+	public static int roundUpPositive(double d) {
+	    int i = (int) d;
+	    double remainder = d - i;
+	    if (remainder > 0.0) {
+	    	i++;
+	    }
+	    if (i<0) return 0;
+	    return i;
+	}
+	
+	public static int roundUpPositiveWithMax(double d, int max) {
+	   int result = roundUpPositive(d);
+	   if (d > max) return max;
+	   return result;
 	}
 	
 	

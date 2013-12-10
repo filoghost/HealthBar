@@ -132,7 +132,7 @@ public class MiscListeners extends JavaPlugin implements Listener {
 	
 	@EventHandler
 	public void onChunkLoad(ChunkLoadEvent event) {
-		if (DamageListener.mobHideDelay == 0) {
+		if (DamageListener.mobHideDelay == 0 && DamageListener.mobEnabled) {
 			for (Entity entity : event.getChunk().getEntities()) {
 				if (entity instanceof LivingEntity && entity.getType() != EntityType.PLAYER) {
 					DamageListener.parseMobHit((LivingEntity) entity, true);
@@ -143,6 +143,7 @@ public class MiscListeners extends JavaPlugin implements Listener {
 	
 	@EventHandler
 	public void onChunkUnload(ChunkUnloadEvent event) {
+		if (!DamageListener.mobEnabled) return;
 		for (Entity entity : event.getChunk().getEntities()) {
 			if (entity instanceof LivingEntity && entity.getType() != EntityType.PLAYER) {
 				DamageListener.hideBar((LivingEntity) entity);
@@ -303,19 +304,19 @@ public class MiscListeners extends JavaPlugin implements Listener {
 		
 		FileConfiguration config = instance.getConfig();
 		
-		usePlayerPermissions = config.getBoolean("use-player-bar-permissions");
-		fixTabNames = config.getBoolean("fix-tab-names");
-		playerHideDelay = config.getInt("player-bars.after-name.hide-delay-seconds");
-		playerEnabled = config.getBoolean("player-bars.enable");
-		playerUseAfter = config.getBoolean("player-bars.after-name.enable");
+		usePlayerPermissions = config.getBoolean(Configuration.Nodes.USE_PLAYER_PERMISSIONS.getNode());
+		fixTabNames = config.getBoolean(Configuration.Nodes.FIX_TAB_NAMES.getNode());
+		playerHideDelay = config.getInt(Configuration.Nodes.PLAYERS_AFTER_DELAY.getNode());
+		playerEnabled = config.getBoolean(Configuration.Nodes.PLAYERS_ENABLE.getNode());
+		playerUseAfter = config.getBoolean(Configuration.Nodes.PLAYERS_AFTER_ENABLE.getNode());
 		
-		playerUseDisabledWorlds = config.getBoolean("player-bars.world-disabling");
+		playerUseDisabledWorlds = config.getBoolean(Configuration.Nodes.PLAYERS_WORLD_DISABLING.getNode());
 		
-		overrideOtherScoreboards = config.getBoolean("override-other-scoreboard");
+		overrideOtherScoreboards = config.getBoolean(Configuration.Nodes.OVERRIDE_OTHER_SCOREBOARD.getNode());
 		if (playerUseDisabledWorlds) {
 			playerDisabledWorlds = Arrays.asList(
 					instance.getConfig()
-					.getString("player-bars.disabled-worlds")
+					.getString(Configuration.Nodes.PLAYERS_DISABLED_WORLDS.getNode())
 					.toLowerCase()
 					.replace(" ", "")
 					.split(","));

@@ -29,9 +29,10 @@ public class Configuration {
 		PLAYERS_AFTER_USE_CUSTOM("player-bars.after-name.use-custom-file", false),
 		
 		PLAYERS_BELOW_ENABLE("player-bars.below-name.enable", true),
-		PLAYERS_BELOW_TEXT("player-bars.below-name.text", "&cHealth"),
+		PLAYERS_BELOW_TEXT("player-bars.below-name.text", "% &cHealth"),
+		PLAYERS_BELOW_DISPLAY_RAW_HEARTS("player-bars.below-name.display-raw-hearts", false),
 		PLAYERS_BELOW_USE_PROPORTION("player-bars.below-name.use-proportion", true),
-		PLAYERS_BELOW_PROPORTIONAL_TO("player-bars.below-name.proportional-to", 10),
+		PLAYERS_BELOW_PROPORTIONAL_TO("player-bars.below-name.proportional-to", 100),
 		
 		PLAYERS_WORLD_DISABLING("player-bars.world-disabling", false),
 		PLAYERS_DISABLED_WORLDS("player-bars.disabled-worlds", "world_nether,world_the_end"),
