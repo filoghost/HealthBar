@@ -18,7 +18,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
@@ -32,7 +31,7 @@ import org.bukkit.event.world.ChunkUnloadEvent;
 
 import com.gmail.filoghost.healthbar.api.HealthBarAPI;
 
-public class MiscListeners extends JavaPlugin implements Listener {
+public class MiscListeners implements Listener {
 	
 	private final static Plugin instance = Main.plugin;
 	private static boolean fixTabNames;

@@ -12,11 +12,10 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.plugin.java.JavaPlugin;
 
 import com.gmail.filoghost.healthbar.api.HealthBarAPI;
 
-public class DeathListener extends JavaPlugin implements Listener {
+public class DeathListener implements Listener {
 
 	private static boolean wantDeathListener;
 	

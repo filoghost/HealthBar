@@ -1,7 +1,7 @@
 name: HealthBar
 author: filoghost
 main: com.gmail.filoghost.healthbar.Main
-version: 1.8
+version: 1.8.1
 softdepend: [EpicBoss Gold Edition]
 
 commands:

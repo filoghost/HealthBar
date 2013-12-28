@@ -51,7 +51,7 @@ public class Main extends JavaPlugin {
 		miscListeners = new MiscListeners();
 		
 		//to check if I've forgot the debug on :)
-		Debug.color("Â§c[HealthBar] Debug ON");		
+		Debug.color("§c[HealthBar] Debug ON");		
 		
 		//create the folder and the file
 		if (getDataFolder().exists()) {
