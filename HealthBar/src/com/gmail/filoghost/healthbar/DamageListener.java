@@ -21,6 +21,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityRegainHealthEvent;
 import org.bukkit.event.entity.EntityRegainHealthEvent.RegainReason;
 import org.bukkit.plugin.Plugin;
@@ -68,6 +69,14 @@ public class DamageListener implements Listener {
 	private static		boolean mobTypeDisabling;
 	private static		List<EntityType> mobDisabledTypes = new ArrayList<EntityType>();
 	
+	
+	//fix for PhatLoots
+	@EventHandler (ignoreCancelled = true, priority = EventPriority.LOW)
+	 public void onEntityDeath(EntityDeathEvent event) {
+		 if (event.getEntity() instanceof LivingEntity) {
+			 hideBar(event.getEntity());
+		 }
+	 }
 	
 	@EventHandler (ignoreCancelled = true, priority = EventPriority.HIGHEST)
 	public void onEntityDamageEvent(EntityDamageEvent event) {
@@ -249,10 +258,8 @@ public class DamageListener implements Listener {
 	    		  double max = mob.getMaxHealth();
 	    		  
 	    		  
-	    		  //if the health is 0 remove the bar and return
+	    		  //if the health is 0
 	    		  if (health <= 0.0) {
-	    			  mob.setCustomName("");
-			    	  mob.setCustomNameVisible(false);
 			    	  return;
 	    		  }
 
@@ -409,7 +416,18 @@ public class DamageListener implements Listener {
 				Main.logger.warning("Could not get boss name from EpicBoss. Hook disabled. Is it updated?");
 				hookEpicboss = false;
 			}
-		  }
+		}
+		
+		String customName = mob.getCustomName();
+		if (customName != null && !customName.startsWith("§r")) {
+			return customName;
+		}
+		
+		StringBoolean sb = namesTable.get(mob.getEntityId());
+		if (sb != null) {
+			//maybe is stored
+			return sb.getString();
+		}
 		
 		String name = (String) localeMap.get(mobType);
 
